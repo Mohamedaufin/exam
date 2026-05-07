@@ -1,0 +1,67 @@
+Aim: To install and conﬁgure Let’s Encrypt SSL/TLS certiﬁcates for a domain using Certbot, and enable automatic renewal to ensure continuous HTTPS security.
+
+Introduction:
+Let’s Encrypt is a free, automated, and open certiﬁcate authority (CA) that issues SSL/TLS certiﬁcates for enabling HTTPS. It uses the ACME protocol to verify domain ownership and deliver certiﬁcates. Each certiﬁcate is valid for 90 days, making automation and auto-renewal essential.
+
+Importance of SSL/TLS Certiﬁcates:
+SSL/TLS certiﬁcates are crucial for securing data transmission between a client and server. They encrypt information such as login credentials, personal details, and payment data, preventing unauthorized access or interception. Let’s Encrypt makes it easier for website owners to implement HTTPS, thereby enhancing user trust and improving SEO rankings, as search engines often prioritize secure websites.
+
+How Let’s Encrypt Works:
+Let’s Encrypt operates through domain validation, conﬁrming that the person requesting a certiﬁcate controls the domain name. This veriﬁcation is done using ACME challenges, such as:
+●	HTTP-01: Uploading a special ﬁle to the server.
+●	DNS-01: Adding a speciﬁc DNS TXT record.
+●	TLS-ALPN-01: Using a custom TLS handshake.
+
+Once validation is complete, the CA issues the SSL/TLS certiﬁcate, which can then be installed on the server.
+
+Short Validity and Auto-Renewal:
+Unlike traditional CAs, Let’s Encrypt certiﬁcates expire every 90 days. This short lifespan encourages automation, reduces the risk of compromised keys being used long-term, and ensures security best practices are maintained. Without auto-renewal, there is a risk of unexpected certiﬁcate expiry, which can cause downtime and trust issues for visitors.
+
+Automation with ACME Clients:
+Certbot is the most widely used ACME client for obtaining and renewing Let’s Encrypt certiﬁcates. It automates the veriﬁcation, issuance, installation, and renewal process. System administrators can integrate Certbot with web servers such as Nginx and Apache, and conﬁgure scheduled tasks (via cron jobs or systemd timers) to automatically renew certiﬁcates before expiry.
+
+Beneﬁts of Let’s Encrypt:
+The main advantages of Let’s Encrypt include:
+
+●	Free of cost: No fees for certiﬁcates.
+●	Automation: Reduced manual intervention for issuance and renewal.
+●	Security: Strong encryption standards and frequent renewals.
+●	Trust: Widely recognized by browsers and operating systems.
+●	Adoption: Encourages HTTPS adoption, making the web safer for everyone. 
+Prerequisites:
+
+●	A registered domain name pointing to the server’s public IP.
+●	Web server installed (Nginx or Apache).
+●	Open ﬁrewall ports 80 (HTTP) and 443 (HTTPS).
+●	Root or sudo access to the server.
+
+Procedure:
+1.	Update system packages: Command : sudo apt update
+2.	Install the prerequisites: 
+For nginx users,
+Command: sudo apt install nginx
+Command: sudo apt install certbot python3-certbot-nginx
+
+For apache users,
+Command: sudo apt install apache2
+Command: sudo apt install certbot python3-certbot-apache
+
+3.	Obtain and install the certiﬁcate:
+For Nginx,
+Command: sudo certbot --nginx -d example.com -d www.example.com
+
+For Apache,
+Command:  sudo certbot –apache -d example.com -d www.example.com 
+4.	Verify HTTPS installation:
+Command: curl -I https://example.com
+
+5.	Enable and test auto-renewal: Command: sudo certbot renew --dry-run
+6.	Reload web server after renewal: For Nginx,
+Command: sudo systemctl reload nginx
+
+For Apache,
+Command: sudo systemctl reload apache2
+
+Result:
+The Let’s Encrypt SSL/TLS certiﬁcate was successfully installed and conﬁgured for the domain. Auto-renewal has been enabled, ensuring the certiﬁcate will update before expiry without manual intervention. Thus, the setup was completed successfully.
+
