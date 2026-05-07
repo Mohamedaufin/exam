@@ -1,0 +1,62 @@
+Ex.2.2. Study on iptables and Firewalls in Linux
+
+Aim:
+To study and understand the working of iptables as a packet filtering and firewall utility in Linux.
+Introduction:
+A firewall in Linux acts as a security system that monitors and controls incoming and outgoing network traffic based on predefined rules. The most commonly used firewall tool in Linux is iptables, which is a user-space utility program that allows system administrators to configure the IP packet filter rules of the Linux kernel.
+•	iptables works on the concept of tables, chains, and rules.
+•	Tables contain chains, and chains contain rules that match packets and take actions (ACCEPT, DROP, REJECT, LOG).
+•	It operates at the network and transport layers, making it suitable for packet filtering, NAT (Network Address Translation), and traffic redirection.
+Benefits of iptables:
+1.	Enhanced Security – Protects the system from unauthorized access and network attacks.
+2.	Traffic Control – Allows administrators to permit, deny, or reroute traffic as needed.
+3.	Packet Filtering – Filters packets based on IP address, port, protocol, or interface.
+4.	Network Address Translation (NAT) – Enables sharing of a single public IP across multiple devices.
+5.	Flexibility – Supports complex rules for different use cases (firewalling, port forwarding, logging).
+6.	Logging & Auditing – Provides logging of network traffic for analysis.
+Prerequisites:
+•	A Linux system with root/administrative privileges.
+•	Basic knowledge of networking concepts (IP addresses, ports, protocols).
+•	Installed package: iptables (by default in most Linux distros, or can be installed via package manager).
+Procedure:
+1.	Check iptables installation:
+Command: sudo iptables --version
+2.	View current rules:
+Command: sudo iptables -L -v -n
+3.	Set default policies: (drop all incoming traffic, allow outgoing)
+Command: sudo iptables -P INPUT DROP
+sudo iptables -P OUTPUT ACCEPT sudo iptables -P FORWARD DROP
+4.	Allow specific traffic: (allow SSH and HTTP)
+Command: sudo iptables -A INPUT -p tcp --dport 22 -j ACCEPT sudo iptables -A INPUT -p tcp --dport 80 -j ACCEPT
+5.	Drop unwanted traffic: (drop ping requests)
+Command: sudo iptables -A INPUT -p icmp --icmp-type echo-request -j DROP
+6.	Save the rules: (so they persist after reboot – depends on distro) Command:
+On Debian/Ubuntu:
+sudo iptables-save > /etc/iptables/rules.v4
+On Arch:
+sudo iptables-save | sudo tee /etc/iptables/iptables.rules > /dev/null
+7.	Verify rules:
+Command: sudo iptables -L -v -n
+Rules Explanation:
+Default Policies
+➔	INPUT (policy DROP)
+◆	By default, all incoming traffic is dropped unless explicitly allowed.
+◆	This is a secure default because it blocks unknown/unauthorized connections.
+➔	FORWARD (policy DROP)
+◆	All forwarded packets (used in routing/NAT scenarios) are dropped.
+◆	Since this system is not acting as a router, forwarding is disabled.
+➔	OUTPUT (policy ACCEPT)
+◆	All outgoing traffic is allowed by default.
+◆	This means the system can freely initiate connections to the internet.
+Configured Rules in INPUT Chain
+➔	ACCEPT tcp -- anywhere anywhere tcp dpt:22
+◆	Allows incoming SSH connections on port 22.
+◆	This is essential for remote administration of the system.
+➔	ACCEPT tcp -- anywhere anywhere tcp dpt:80
+◆	Allows incoming HTTP traffic on port 80.
+◆	This means the system can host a web server and accept requests from clients.
+➔	DROP icmp -- anywhere anywhere icmp echo-request
+◆	Drops all ICMP echo-requests (ping).
+◆	This makes the system invisible to ping probes, improving security by preventing network reconnaissance.
+Result:
+The iptables firewall was configured with a default DROP policy for inbound traffic. Only SSH (22) and HTTP (80) are allowed, while ICMP echo requests are blocked. Outbound traffic is unrestricted, ensuring security with essential connectivity.
