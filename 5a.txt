@@ -1,0 +1,8 @@
+$ gpg --version
+$ sudo apt install gnupg
+$ gpg --gen-key
+$ gpg --list-keys
+$ nano message.txt
+$ gpg -e -r “Test User” message.txt
+cat message.txt.gpg
+$ gpg -d message.txt.gpg
