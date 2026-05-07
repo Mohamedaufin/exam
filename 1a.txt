@@ -52,3 +52,6 @@ sudo sysctl -p
 sudo systemctl start openvpn@server
 sudo systemctl enable openvpn@server
 sudo systemctl status openvpn@server
+
+Check for tun0 interface: ip a
+If you see tun0 with IP 10.8.0.1, the server is up!
