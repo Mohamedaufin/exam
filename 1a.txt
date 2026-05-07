@@ -1,0 +1,54 @@
+sudo apt update
+sudo apt install openvpn easy-rsa -y
+make-cadir ~/openvpn-ca
+cd ~/openvpn-ca
+./easyrsa init-pki
+./easyrsa build-ca
+./easyrsa gen-req server nopass
+./easyrsa sign-req server server
+./easyrsa gen-dh
+openvpn --genkey secret ta.key
+sudo cp pki/ca.crt pki/private/server.key pki/issued/server.crt pki/dh.pem ta.key /etc/openvpn/
+sudo nano /etc/openvpn/server.conf -
+port 1194
+proto udp
+dev tun
+
+ca ca.crt
+cert server.crt
+key server.key
+dh dh.pem
+tls-auth ta.key 0
+
+server 10.8.0.0 255.255.255.0
+
+ifconfig-pool-persist ipp.txt
+
+push "redirect-gateway def1 bypass-dhcp"
+push "dhcp-option DNS 1.1.1.1"
+push "dhcp-option DNS 8.8.8.8"
+
+keepalive 10 120
+
+cipher AES-256-CBC
+
+user nobody
+group nogroup
+
+persist-key
+persist-tun
+
+status openvpn-status.log
+log-append /var/log/openvpn.log
+
+verb 3
+
+explicit-exit-notify 1
+
+sudo nano /etc/sysctl.conf - net.ipv4.ip_forward = 1
+net.ipv4.ip_forward = 1
+
+sudo sysctl -p
+sudo systemctl start openvpn@server
+sudo systemctl enable openvpn@server
+sudo systemctl status openvpn@server
