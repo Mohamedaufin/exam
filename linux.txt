@@ -1,0 +1,30 @@
+mode=$1
+shift=$2
+in=$3
+out=$4
+
+low=abcdefghijklmnopqrstuvwxyz
+up=ABCDEFGHIJKLMNOPQRSTUVWXYZ
+
+low_d=${low:$shift}${low:0:$shift}
+up_d=${up:$shift}${up:0:$shift}
+
+if [ "$mode" = "enc" ]; then
+
+    tr "$low$up" "$low_d$up_d" < "$in" > "$out"
+
+    echo "Encrypted:"
+
+elif [ "$mode" = "dec" ]; then
+
+    tr "$low_d$up_d" "$low$up" < "$in" > "$out"
+
+    echo "Decrypted:"
+
+else
+
+    echo "Usage: ./caesar.sh enc|dec shift infile outfile"
+
+fi
+
+cat "$out"
