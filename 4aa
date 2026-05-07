@@ -1,0 +1,42 @@
+import java.io.IOException;
+
+class UFWFirewall {
+
+    public static void main(String args[]) {
+
+        try {
+
+            System.out.println("Configuring UFW Firewall...");
+
+            Process p1 = new ProcessBuilder(
+                    "sudo","ufw","default","deny","incoming").start();
+            p1.waitFor();
+
+            Process p2 = new ProcessBuilder(
+                    "sudo","ufw","default","allow","outgoing").start();
+            p2.waitFor();
+
+            Process p3 = new ProcessBuilder(
+                    "sudo","ufw","allow","80/tcp").start();
+            p3.waitFor();
+
+            Process p4 = new ProcessBuilder(
+                    "sudo","ufw","allow","443/tcp").start();
+            p4.waitFor();
+
+            Process p5 = new ProcessBuilder(
+                    "sudo","ufw","enable").start();
+            p5.waitFor();
+
+            System.out.println(
+                    "UFW configured to allow only web traffic.");
+
+        }
+        catch(IOException | InterruptedException e) {
+
+            System.out.println("Error configuring firewall");
+
+            e.printStackTrace();
+        }
+    }
+}
