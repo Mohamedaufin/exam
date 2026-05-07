@@ -1,0 +1,50 @@
+public class HillCipher {
+
+    public static void main(String[] args) {
+
+        int[][] key = { {3,3}, {2,5} };
+
+        String plain = "HELP";
+
+        String encrypted = "", decrypted = "";
+
+        // Encryption
+        for(int i=0; i<plain.length(); i+=2){
+
+            int a = plain.charAt(i) - 'A';
+            int b = plain.charAt(i+1) - 'A';
+
+            int c1 = (key[0][0]*a + key[0][1]*b) % 26;
+            int c2 = (key[1][0]*a + key[1][1]*b) % 26;
+
+            encrypted += (char)(c1 + 'A');
+            encrypted += (char)(c2 + 'A');
+        }
+
+        // Inverse
+        int det = (3*5 - 3*2) % 26;   // 9
+        int invDet = 3;               // 9*3 %26 =1
+
+        int[][] inv = {
+            {(5*invDet)%26, (26-3*invDet)%26},
+            {(26-2*invDet)%26, (3*invDet)%26}
+        };
+
+        // Decryption
+        for(int i=0; i<encrypted.length(); i+=2){
+
+            int a = encrypted.charAt(i) - 'A';
+            int b = encrypted.charAt(i+1) - 'A';
+
+            int p1 = (inv[0][0]*a + inv[0][1]*b) % 26;
+            int p2 = (inv[1][0]*a + inv[1][1]*b) % 26;
+
+            decrypted += (char)(p1 + 'A');
+            decrypted += (char)(p2 + 'A');
+        }
+
+        System.out.println("Plain Text : " + plain);
+        System.out.println("Encrypted  : " + encrypted);
+        System.out.println("Decrypted  : " + decrypted);
+    }
+}
