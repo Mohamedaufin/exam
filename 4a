@@ -1,0 +1,16 @@
+import java.io.IOException;
+class UFWFirewall{
+        public static void main(String[] args){
+                try{
+                        System.out.println("Configuring UFW Firewall...");
+                        new ProcessBuilder("sudo","ufw","default","deny","incoming").start();
+                        new ProcessBuilder("sudo","ufw","default","allow","outgoing").start();
+                        new ProcessBuilder("sudo","ufw","allow","80/tcp").start();
+                        new ProcessBuilder("sudo","ufw","allow","443/tcp").start();
+new ProcessBuilder("sudo", "ufw","enable").start();
+System.out.println("UFW Configured....");
+}
+catch (IOException e){
+System.out.println("Error configuring");
+}}}
+
