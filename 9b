@@ -1,0 +1,29 @@
+sudo apt install sqlite3
+sqlite3 test.db
+CREATE TABLE users(name TEXT);
+INSERT INTO users VALUES('alice');
+.exit
+
+nano sqli.py
+import sqlite3
+db=sqlite3.connect("test.db")
+c=db.cursor()
+x=input("Name: ")
+q="SELECT * FROM users WHERE name='"+x+"'"
+print(q)
+c.execute(q)
+print(c.fetchall())
+python3 sqli.py
+alice
+python3 sqli.py
+' OR '1'='1
+
+nano secure.py
+import sqlite3
+db=sqlite3.connect("test.db")
+c=db.cursor()
+x=input("Name: ")
+c.execute("SELECT * FROM users WHERE name=?", (x,))
+print(c.fetchall())
+python3 secure.py
+' OR '1'='1
