@@ -1,0 +1,8 @@
+echo "This is a sample file for hashing experiment" > file.txt
+cat file.txt
+sha256sum file.txt
+sha256sum file.txt > hash.txt
+openssl dgst -sha256 -hmac "secretkey" file.txt
+sha256sum -c hash.txt
+echo "File modified!" >> file.txt
+sha256sum -c hash.txt
