@@ -1,0 +1,20 @@
+import java.util.*;
+class SubstituionCipher {
+    public static void main(String[] args) {
+        String a = "abcdefghijklmnopqrstuvwxyz";
+        String b = "zyxwvutsrqponmlkjihgfedcba";
+        String text = "hello", enc ="", dec="";
+        for (int i=0;i<text.length();i++){
+            char c = text.charAt(i);
+            int index = a.indexOf(c);
+            enc+= (index!=-1)? b.charAt(index):c;
+        }
+        for(int i=0;i<enc.length();i++){
+            char c = enc.charAt(i);
+            int index = b.indexOf(c);
+            dec += (index!=-1)?a.charAt(index):c;
+        }
+        System.out.println(enc);
+        System.out.println(dec);
+    }
+}
