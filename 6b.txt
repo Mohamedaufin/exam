@@ -1,0 +1,44 @@
+#!/bin/bash
+
+mode=$1
+key=$2
+in=$3
+out=$4
+
+awk -v m="$mode" -v k="$key" '
+BEGIN{
+FS=""
+A="ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+}
+
+{
+j=0
+
+for(i=1;i<=NF;i++){
+
+c=$i
+
+if(c~/[A-Za-z]/){
+
+p=index(A,toupper(c))-1
+
+kv=index(A,toupper(substr(k,(j%length(k))+1,1)))-1
+
+if(m=="enc")
+v=(p+kv)%26
+else
+v=(p-kv+26)%26
+
+printf "%s", substr(A,v+1,1)
+
+j++
+
+}
+else
+printf "%s", c
+}
+
+print ""
+}
+' "$in" > "$out"
+
