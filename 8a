@@ -1,0 +1,25 @@
+sudo apt update
+
+sudo apt install steghide
+
+steghide --version
+
+wget https://picsum.photos/600/400 -O cover.jpg
+
+xdg-open cover.jpg
+
+echo "This is a hidden message inside the image." > secret.txt
+
+steghide embed -cf cover.jpg -ef secret.txt -sf stego.jpg
+
+steghide info stego.jpg
+
+steghide extract -sf stego.jpg
+
+diff secret.txt secret.txt
+
+md5sum secret.txt
+
+md5sum cover.jpg
+
+md5sum stego.jpg
